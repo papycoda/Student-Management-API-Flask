@@ -27,3 +27,4 @@ class Course(db.Model):
         db.session.delete(model)
         db.session.commit()
         return True
+    
