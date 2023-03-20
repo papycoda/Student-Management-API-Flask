@@ -142,71 +142,71 @@ class AdminCourse(Resource):
 
         return {"message": "Course deleted"}, HTTPStatus.OK
     
-    @admin_auth_namespace.route('/course/add_grade/int:course_id/int:student_id')
-    class AdminAddGrade(Resource):
-        @admin_auth_namespace.expect(grade_model)
-        @jwt_required()
-        def post(self, course_id, student_id):
-            '''
-            Add grade for a student in a course.
-            '''
-            admin_email = get_jwt_identity()
-            admin = Admin.query.filter_by(email=admin_email).first()
-            if admin.type_acct != 'admin':
-                return {"message": "Not authorized"}, HTTPStatus.UNAUTHORIZED
-            course = Course.query.filter_by(id=course_id).first()
-            if not course:
-                return {"message": "Course not found"}, HTTPStatus.NOT_FOUND
+@admin_auth_namespace.route('/course/add_grade/int:course_id/int:student_id')
+class AdminAddGrade(Resource):
+    @admin_auth_namespace.expect(grade_model)
+    @jwt_required()
+    def post(self, course_id, student_id):
+        '''
+        Add grade for a student in a course.
+        '''
+        admin_email = get_jwt_identity()
+        admin = Admin.query.filter_by(email=admin_email).first()
+        if admin.type_acct != 'admin':
+            return {"message": "Not authorized"}, HTTPStatus.UNAUTHORIZED
+        course = Course.query.filter_by(id=course_id).first()
+        if not course:
+            return {"message": "Course not found"}, HTTPStatus.NOT_FOUND
 
-            student = Student.query.filter_by(id=student_id).first()
-            if not student:
-                return {"message": "Student not found"}, HTTPStatus.NOT_FOUND
+        student = Student.query.filter_by(id=student_id).first()
+        if not student:
+            return {"message": "Student not found"}, HTTPStatus.NOT_FOUND
 
-            data = request.get_json()
-            grade_score = data['score']
-            new_grade = Grade(score=grade_score, student=student_id)
-            new_grade.save()
+        data = request.get_json()
+        grade_score = data['score']
+        new_grade = Grade(score=grade_score, student=student_id)
+        new_grade.save()
 
-            return new_grade, HTTPStatus.CREATED
+        return new_grade, HTTPStatus.CREATED
         
 
-    @admin_auth_namespace.route('/course/edit_grade/int:grade_id')
-    class AdminEditGrade(Resource):
-        @admin_auth_namespace.expect(grade_model)
-        @jwt_required()
-        def put(self, grade_id):
-            '''
-            Update an existing grade.
-            '''
-            admin_email = get_jwt_identity()
-            admin = Admin.query.filter_by(email=admin_email).first()
-            if admin.type_acct != 'admin':
-                return {"message": "Not authorized"}, HTTPStatus.UNAUTHORIZED
-            grade = Grade.query.filter_by(id=grade_id).first()   
-            if not grade:
-                return {"message": "Grade not found"}, HTTPStatus.NOT_FOUND
-            data = request.get_json()
-            grade_score = data['score']
-            grade.score = grade_score
-            grade.save()
+@admin_auth_namespace.route('/course/edit_grade/int:grade_id')
+class AdminEditGrade(Resource):
+    @admin_auth_namespace.expect(grade_model)
+    @jwt_required()
+    def put(self, grade_id):
+        '''
+        Update an existing grade.
+        '''
+        admin_email = get_jwt_identity()
+        admin = Admin.query.filter_by(email=admin_email).first()
+        if admin.type_acct != 'admin':
+            return {"message": "Not authorized"}, HTTPStatus.UNAUTHORIZED
+        grade = Grade.query.filter_by(id=grade_id).first()   
+        if not grade:
+            return {"message": "Grade not found"}, HTTPStatus.NOT_FOUND
+        data = request.get_json()
+        grade_score = data['score']
+        grade.score = grade_score
+        grade.save()
 
-            return grade, HTTPStatus.OK
-        
-    @admin_auth_namespace.route('/course/delete_grade/int:grade_id')
-    class AdminDeleteGrade(Resource):
-        @jwt_required()
-        def delete(self, grade_id):
-            '''
-            Delete an existing grade.
-            '''
-            admin_email = get_jwt_identity()
-            admin = Admin.query.filter_by(email=admin_email).first()
-            if admin.type_acct != 'admin':
-                return {"message": "Not authorized"}, HTTPStatus.UNAUTHORIZED
-            grade = Grade.query.filter_by(id=grade_id).first()
-            if not grade:
-                return {"message": "Grade not found"}, HTTPStatus.NOT_FOUND
+        return grade, HTTPStatus.OK
+    
+@admin_auth_namespace.route('/course/delete_grade/int:grade_id')
+class AdminDeleteGrade(Resource):
+    @jwt_required()
+    def delete(self, grade_id):
+        '''
+        Delete an existing grade.
+        '''
+        admin_email = get_jwt_identity()
+        admin = Admin.query.filter_by(email=admin_email).first()
+        if admin.type_acct != 'admin':
+            return {"message": "Not authorized"}, HTTPStatus.UNAUTHORIZED
+        grade = Grade.query.filter_by(id=grade_id).first()
+        if not grade:
+            return {"message": "Grade not found"}, HTTPStatus.NOT_FOUND
 
-            grade.delete()
+        grade.delete()
 
-            return {"message": "Grade deleted"}, HTTPStatus.OK
+        return {"message": "Grade deleted"}, HTTPStatus.OK
