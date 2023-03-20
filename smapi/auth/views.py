@@ -1,7 +1,7 @@
 from flask_restx import Namespace, Resource, fields
 from flask import request
 from ..models.admin import Admin
-from ..models.course import Course, CourseList
+from ..models.course import Course
 from ..models.grades import Grade
 from ..models.student import Student
 from flask_jwt_extended import jwt_required, get_jwt_identity, create_refresh_token, create_access_token

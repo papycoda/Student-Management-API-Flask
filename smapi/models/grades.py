@@ -1,4 +1,4 @@
-from utils import db
+from ..utils import db
 
 
 class Grade(db.Model):

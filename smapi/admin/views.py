@@ -5,7 +5,7 @@ from ..models.course import Course
 from flask import jsonify
 from http import HTTPStatus
 from flask_jwt_extended import jwt_required, get_jwt_identity
-from utils import db
+from ..utils import db
 
 admin_namespace = Namespace(
     'auth', description="Admin authentication for deleting student on the management api")
