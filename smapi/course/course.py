@@ -36,7 +36,7 @@ class GetCourseBySpecificUser(Resource):
     @jwt_required()
     def get(self):
         '''
-            Get course for a user through their identity
+            Get courses for a user based on track using Authorization
         '''
         courses = Course.query.filter_by(student=get_jwt_identity().id).all()
         return courses, HTTPStatus.OK

@@ -6,7 +6,8 @@ class Course(db.Model):
     name = db.Column(db.String(50), nullable=False)
     instructor = db.Column(db.String(30), nullable=False)
     student_id = db.Column(db.Integer(), db.ForeignKey('student.id'))
-    student = db.relationship('Student', backref='courses')
+    student = db.relationship('Student', backref='enrolled_courses')
+
 
     def __repr__(self):
         return f"Course('{self.name}')"

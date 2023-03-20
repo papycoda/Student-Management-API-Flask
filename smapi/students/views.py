@@ -5,15 +5,36 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 from http import HTTPStatus
 
 student_namespace = Namespace(
-    'views', description="Authentication for student management api"
+    'Students', description="Authentication for student management api"
 )
 
 student_model = student_namespace.model('Students', {
-    'id': fields.Integer(readOnly=True, description='Student Identifier'),
+    'id': fields.Integer(readOnly=True, description='Student Identifier',autoincrement=True),
     'name': fields.String(required=True, description='Student name'),
     'email': fields.String(required=True, description='Student email address'),
     'password': fields.String(required=True, description='Student password')
 })
+
+
+
+#register as student
+@student_namespace.route('/signup')
+class StudentSignUp(Resource):
+    @student_namespace.expect(student_model)
+    @student_namespace.marshal_with(student_model)
+    def post(self):
+        '''
+            Student Signup
+        '''
+        data = student_namespace.payload
+        name = data['name']
+        email = data['email']
+        password = data['password']
+
+        new_student = Student(name=name, email=email, password=password)
+        new_student.save()
+
+        return new_student, HTTPStatus.CREATED
 
 @student_namespace.route('/getall_student')
 class GetAllStudents(Resource):
