@@ -36,7 +36,7 @@ class StudentSignUp(Resource):
 
         return new_student, HTTPStatus.CREATED
 
-@student_namespace.route('/getall_student')
+@student_namespace.route('/')
 class GetAllStudents(Resource):
     @jwt_required()
     def get(self):
